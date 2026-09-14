@@ -39,11 +39,9 @@ from sqlmodel import Session
 
 from app.core.security import create_access_token
 from app.models import Element, Space, SpaceElement, User
-from app.models import Space
 from tests.utils.user import create_random_user
 
 
-def test_websocket_join_and_broadcast(
 def test_get_back_ack_for_joining_the_space(
     client: TestClient, session: Session
 ) -> None:
@@ -52,7 +50,7 @@ def test_get_back_ack_for_joining_the_space(
     Player 1 joins -> receives "space-joined" (with empty users list).
     Player 2 joins -> receives "space-joined" (with Player 1 in users list).
     Player 1 receives -> "user-joined" broadcast announcing Player 2!
-    """TEST 1 (From Jest: 'Get back ack for joining the space'):
+      TEST 1 (From Jest: 'Get back ack for joining the space'):
     1. Player 1 connects & joins:
        - Receives 'space-joined' with spawn {x, y} and empty users list [].
     2. Player 2 connects & joins:
@@ -119,12 +117,11 @@ def test_get_back_ack_for_joining_the_space(
             assert msg3["payload"]["y"] == msg2["payload"]["spawn"]["y"]
 
 
-def test_websocket_movement_valid_and_rejected(
 def test_user_should_not_be_able_to_move_across_the_boundary_of_the_wall(
     client: TestClient, session: Session
 ) -> None:
     """TEST: Grid movement rules (anti-cheat verification).
-    """TEST 2 (From Jest: 'User should not be able to move across the boundary of the wall'):
+    TEST 2 (From Jest: 'User should not be able to move across the boundary of the wall'):
     Attempting to move way beyond the room boundaries (e.g. x=1000000, y=10000)
     must be rejected and the user's position snapped back to their spawn coordinates.
     """
@@ -133,8 +130,8 @@ def test_user_should_not_be_able_to_move_across_the_boundary_of_the_wall(
     session.add(space)
     session.commit()
 
-    1. Valid move: moving exactly 1 block (x + 1) -> broadcasts "movement".
-    2. Invalid move: trying to jump 2+ blocks (x + 10) -> receives "movement-rejected".
+    # 1. Valid move: moving exactly 1 block (x + 1) -> broadcasts "movement".
+    # 2. Invalid move: trying to jump 2+ blocks (x + 10) -> receives "movement-rejected".
     token1 = create_access_token(user_id=user1.id, role=user1.role.value)
 
     with client.websocket_connect("/api/v1/ws") as ws1:
@@ -264,7 +261,6 @@ def test_correct_movement_should_be_broadcasted_to_the_other_sockets_in_the_room
             assert message["payload"]["y"] == p1_y
 
 
-def test_websocket_user_left_on_disconnect(
 def test_if_a_user_leaves_the_other_user_receives_a_leave_event(
     client: TestClient, session: Session
 ) -> None:
