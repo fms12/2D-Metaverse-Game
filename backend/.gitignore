@@ -15,5 +15,3 @@ dist/
 __pycache__/
 *.py[oc]
 .venv/
-pyproject.toml
-uv.lock
