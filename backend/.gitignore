@@ -1,0 +1,19 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Frontend dependencies and builds
+node_modules/
+dist/
+
+# Test and tool caches
+.pytest_cache/
+.mypy_cache/
+.coverage
+
+__pycache__/
+*.py[oc]
+.venv/
+pyproject.toml
+uv.lock

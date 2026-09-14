@@ -1,0 +1,12 @@
+// tsconfig.node.json — Config for Node.js environment files like vite.config.ts
+// Vite config files run in Node.js, not the browser, so they need a separate TS config.
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["vite.config.ts"]
+}

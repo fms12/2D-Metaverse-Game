@@ -1,0 +1,56 @@
+<!doctype html>
+<!--
+  index.html — The ONE HTML file that Vite serves for our entire app.
+
+  🎓 WHY ONLY ONE HTML FILE? (Single Page Application - SPA)
+  Traditional websites have one HTML file per page (home.html, about.html, contact.html).
+  In a React SPA, there is only ONE HTML file. React controls all the "pages" using
+  JavaScript. When you navigate from /dashboard to /game, React swaps out which
+  components are rendered — the browser never actually loads a new HTML file from the server.
+
+  This makes navigation feel instant (no full page reloads)!
+  The tradeoff: the first load takes a bit longer (downloading React JS).
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      viewport meta tag: Makes the page responsive on mobile devices.
+      width=device-width: Match the screen width.
+      initial-scale=1.0: Don't zoom in/out on initial load.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tab icon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- Page title shown in the browser tab -->
+    <title>Metaverse 2D | Virtual Collaboration Space</title>
+
+    <!-- Google Fonts for the futuristic game UI feel (optional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!--
+      🎓 THIS IS WHERE REACT MOUNTS!
+      The <div id="root"> is the "mounting point" for React.
+      React takes over this div and renders all your components inside it.
+      Initially it's empty — React fills it in with JavaScript.
+
+      It's like an empty picture frame that React hangs its painting on.
+    -->
+    <div id="root"></div>
+
+    <!--
+      The main.tsx entry point is loaded as an ES Module.
+      Vite injects the actual bundled script path here during build.
+      "type="module"" is required for modern ESModule imports to work.
+    -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

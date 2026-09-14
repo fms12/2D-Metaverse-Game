@@ -1,0 +1,157 @@
+/* =============================================================================
+   GLOBAL CSS (src/index.css)
+   =============================================================================
+   This file contains:
+   1. Tailwind CSS directives (the magic that injects all utility classes)
+   2. Global CSS resets and base styles
+   3. Custom CSS variables for the dark metaverse theme
+   ============================================================================= */
+
+/* =============================================================================
+   TAILWIND DIRECTIVES
+   🎓 HOW TAILWIND CSS WORKS:
+   These three @tailwind lines are NOT real CSS — they are special instructions
+   for the PostCSS/Tailwind compiler:
+
+   @tailwind base     — Injects a CSS reset (like Normalize.css)
+                        Sets consistent default styles across all browsers.
+   @tailwind components  — Injects any @layer components you define.
+   @tailwind utilities   — Injects ALL the utility classes (flex, p-4, text-white, etc.)
+
+   During build, Tailwind replaces these with the actual CSS.
+   ============================================================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   BASE LAYER OVERRIDES
+   @layer base — Customizes the Tailwind reset with our global defaults.
+   ============================================================================= */
+@layer base {
+  /* Apply dark background and light text to the whole page by default */
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-metaverse-bg text-white font-body antialiased;
+    /* antialiased: makes fonts look smoother (sub-pixel rendering) */
+  }
+
+  /* Remove default margins/padding from headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  /* Make all images responsive by default */
+  img {
+    @apply max-w-full h-auto;
+  }
+
+  /* Custom scrollbar for the dark theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-metaverse-surface;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-metaverse-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-metaverse-accent;
+  }
+}
+
+/* =============================================================================
+   COMPONENT LAYER
+   @layer components — Define reusable CSS component classes.
+   🎓 This is for styles you use on many elements but don't want to repeat
+      Tailwind classes every time. Example: .btn-primary used on 10 buttons.
+   ============================================================================= */
+@layer components {
+  /* Glass morphism card effect — popular in modern dark UIs */
+  .glass-card {
+    @apply bg-metaverse-surface/80 backdrop-blur-sm border border-metaverse-border rounded-xl;
+    /* 
+      bg-metaverse-surface/80 = our dark surface color at 80% opacity
+      backdrop-blur-sm = blur whatever is BEHIND this element (glass effect)
+      border border-metaverse-border = subtle dark border
+    */
+  }
+
+  /* Neon text glow effect for important labels */
+  .neon-text {
+    color: #6c63ff;
+    text-shadow: 0 0 10px #6c63ff80;
+  }
+
+  /* The game canvas container — fullscreen with no overflow */
+  .game-container {
+    @apply relative w-full h-screen overflow-hidden bg-black;
+  }
+
+  /* Status indicator pill (online/offline/connecting) */
+  .status-pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
+  }
+}
+
+/* =============================================================================
+   CANVAS SPECIFIC STYLES
+   The HTML5 Canvas element renders our 2D game world.
+   ============================================================================= */
+
+/* Disable text cursor when hovering over the game canvas */
+canvas {
+  cursor: default;
+  /* Disable tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent canvas from getting blurry on high-DPI screens (handled in JS too) */
+  image-rendering: pixelated;
+}
+
+/* =============================================================================
+   ANIMATION UTILITIES
+   ============================================================================= */
+
+/* Fade in animation used on page mount */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Blinking cursor animation for terminal-like effects */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
