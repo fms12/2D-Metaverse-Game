@@ -102,19 +102,16 @@ def test_get_back_ack_for_joining_the_space(
             })
 
             # Player 2 should see Player 1 already in the room
-            # msg2 = ws2.receive_json()
-            # assert msg2["type"] == "space-joined"
-            # assert len(msg2["payload"]["users"]) == 1
+            msg2 = ws2.receive_json()
+            assert msg2["type"] == "space-joined"
+            assert len(msg2["payload"]["users"]) == 1
 
             # Player 1 should receive broadcast: "Player 2 joined!"
             broadcast_msg = ws1.receive_json()
             assert broadcast_msg["type"] == "user-joined"
             assert broadcast_msg["payload"]["userId"] == user2.id
-            # msg3 = ws1.receive_json()
-            # assert msg3["type"] == "user-joined"
-            # assert msg3["payload"]["userId"] == user2.id
-            # assert msg3["payload"]["x"] == msg2["payload"]["spawn"]["x"]
-            # assert msg3["payload"]["y"] == msg2["payload"]["spawn"]["y"]
+            assert broadcast_msg["payload"]["x"] == msg2["payload"]["spawn"]["x"]
+            assert broadcast_msg["payload"]["y"] == msg2["payload"]["spawn"]["y"]
 
 
 def test_user_should_not_be_able_to_move_across_the_boundary_of_the_wall(
@@ -244,8 +241,7 @@ def test_correct_movement_should_be_broadcasted_to_the_other_sockets_in_the_room
             # --- SUBTEST B: Illegal jump (trying to move 2+ blocks) ---
             ws1.send_json({
                 "type": "move",
-                "payload": {"x": valid_new_x + 5, "y": p1_spawn_y},  # Jumped 5 tiles!
-                "payload": {"x": target_x, "y": p1_y, "userId": user1.id},
+                "payload": {"x": valid_new_x + 5, "y": p1_spawn_y},
             })
 
             # Player 1 should receive "movement-rejected"
@@ -254,11 +250,6 @@ def test_correct_movement_should_be_broadcasted_to_the_other_sockets_in_the_room
             # Coordinates snapped back to the last valid position
             assert rejected_msg["payload"]["x"] == valid_new_x
             assert rejected_msg["payload"]["y"] == p1_spawn_y
-            # Player 2 should receive the movement broadcast
-            message = ws2.receive_json()
-            assert message["type"] == "movement"
-            assert message["payload"]["x"] == target_x
-            assert message["payload"]["y"] == p1_y
 
 
 def test_if_a_user_leaves_the_other_user_receives_a_leave_event(
@@ -289,18 +280,12 @@ def test_if_a_user_leaves_the_other_user_receives_a_leave_event(
             ws1.send_json({"type": "join", "payload": {"spaceId": space.id, "token": token1}})
             ws1.receive_json()  # space-joined for ws1
             ws2.receive_json()  # ws2 sees ws1 joined!
-            ws2.receive_json()  # ws2 receives user-joined for ws1
 
         # Now ws1 has exited the with block (DISCONNECTED / SOCKET CLOSED)!
         # ws2 should receive the "user-left" event
         leave_msg = ws2.receive_json()
         assert leave_msg["type"] == "user-left"
         assert leave_msg["payload"]["userId"] == user1.id
-        # Now ws1 has disconnected!
-        # Player 2 should receive the "user-left" broadcast
-        message = ws2.receive_json()
-        assert message["type"] == "user-left"
-        assert message["payload"]["userId"] == user1.id
 
 
 def test_websocket_collisions_and_boundaries(
