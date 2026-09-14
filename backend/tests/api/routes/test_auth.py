@@ -109,8 +109,8 @@ def test_signup_short_password_fails_validation(client: TestClient) -> None:
     """TEST (Sad Path): Short passwords (< 6 chars) must be rejected by Pydantic.
 
     LEARNING NOTE:
-    Notice we expect HTTP 422 (Unprocessable Entity).
-    This proves that Pydantic validated the data before any database query ran!
+    The API converts Pydantic validation errors to HTTP 400 (Bad Request).
+    This proves that validation ran before any database query.
     """
     username = f"user_{random_lower_string(8)}"
     response = client.post(
@@ -122,7 +122,7 @@ def test_signup_short_password_fails_validation(client: TestClient) -> None:
         },
     )
 
-    assert response.status_code == 422, "Pydantic validation error should return HTTP 422"
+    assert response.status_code == 400, "Pydantic validation error should return HTTP 400"
 
 
 # ------------------------------------------------------------------------------

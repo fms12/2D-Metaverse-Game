@@ -102,7 +102,7 @@ def test_create_space_from_map_template(
 def test_create_space_invalid_dimension_format_fails(
     client: TestClient, normal_user_headers: dict[str, str]
 ) -> None:
-    """TEST (Sad Path): Invalid dimension string like "100-200" or "big" must be rejected by Pydantic."""
+    """TEST (Sad Path): An invalid dimension string must return HTTP 400."""
     response = client.post(
         "/api/v1/space",
         headers=normal_user_headers,
@@ -111,8 +111,7 @@ def test_create_space_invalid_dimension_format_fails(
             "dimensions": "not-a-dimension",  # Must match regex: ^[0-9]{1,4}x[0-9]{1,4}$
         },
     )
-    assert response.status_code == 422
-    assert response.status_code in (400, 422)
+    assert response.status_code == 400
 
 
 # ------------------------------------------------------------------------------
