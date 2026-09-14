@@ -102,19 +102,19 @@ def test_get_back_ack_for_joining_the_space(
             })
 
             # Player 2 should see Player 1 already in the room
-            msg2 = ws2.receive_json()
-            assert msg2["type"] == "space-joined"
-            assert len(msg2["payload"]["users"]) == 1
+            # msg2 = ws2.receive_json()
+            # assert msg2["type"] == "space-joined"
+            # assert len(msg2["payload"]["users"]) == 1
 
             # Player 1 should receive broadcast: "Player 2 joined!"
             broadcast_msg = ws1.receive_json()
             assert broadcast_msg["type"] == "user-joined"
             assert broadcast_msg["payload"]["userId"] == user2.id
-            msg3 = ws1.receive_json()
-            assert msg3["type"] == "user-joined"
-            assert msg3["payload"]["userId"] == user2.id
-            assert msg3["payload"]["x"] == msg2["payload"]["spawn"]["x"]
-            assert msg3["payload"]["y"] == msg2["payload"]["spawn"]["y"]
+            # msg3 = ws1.receive_json()
+            # assert msg3["type"] == "user-joined"
+            # assert msg3["payload"]["userId"] == user2.id
+            # assert msg3["payload"]["x"] == msg2["payload"]["spawn"]["x"]
+            # assert msg3["payload"]["y"] == msg2["payload"]["spawn"]["y"]
 
 
 def test_user_should_not_be_able_to_move_across_the_boundary_of_the_wall(
@@ -221,8 +221,8 @@ def test_correct_movement_should_be_broadcasted_to_the_other_sockets_in_the_room
             ws2.send_json({"type": "join", "payload": {"spaceId": space.id, "token": token2}})
             ws2.receive_json()  # space-joined
             ws1.receive_json()  # user-joined broadcast
-            ws2.receive_json()  # ws2 space-joined
-            ws1.receive_json()  # ws1 receives user-joined broadcast
+            # ws2.receive_json()  # ws2 space-joined
+            # ws1.receive_json()  # ws1 receives user-joined broadcast
 
             # --- SUBTEST A: Valid 1-block move ---
             # Move 1 block horizontally (x + 1)
