@@ -122,7 +122,7 @@ export class WSClient {
     const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
     const wsUrl =
       import.meta.env.VITE_WS_URL ||
-      `${wsProtocol}://${window.location.hostname}:8000/api/v1/ws`;
+      `${wsProtocol}://${window.location.host}/api/v1/ws`;
 
     const token = useStore.getState().token;
     if (!token) {

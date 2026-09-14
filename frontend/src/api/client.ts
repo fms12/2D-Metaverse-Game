@@ -45,9 +45,7 @@ const apiClient = axios.create({
   // 🎓 baseURL: All requests will prepend this URL.
   // axios.get('/space/all') becomes: GET http://localhost:8000/api/v1/space/all
   // This matches the Vite proxy config — /api is forwarded to localhost:8000
-  baseURL:
-    import.meta.env.VITE_API_URL ||
-    `${window.location.protocol}//${window.location.hostname}:8000`,
+     baseURL: import.meta.env.VITE_API_URL || "",
 
   // 🎓 headers: Default headers sent with EVERY request.
   headers: {
